@@ -10,6 +10,7 @@ using AspNetMvcFirstApp.Models;
 
 namespace AspNetMvcFirstApp.Controllers
 {
+    [Authorize]
     public class StudentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -27,7 +28,7 @@ namespace AspNetMvcFirstApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            StudentViewModel student = db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -36,6 +37,7 @@ namespace AspNetMvcFirstApp.Controllers
         }
 
         // GET: Students/Create
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
@@ -46,9 +48,9 @@ namespace AspNetMvcFirstApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CreatedOn")] Student student)
+        public ActionResult Create(StudentViewModel student)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //Server-Side validation
             {
                 db.Students.Add(student);
                 db.SaveChanges();
@@ -59,13 +61,14 @@ namespace AspNetMvcFirstApp.Controllers
         }
 
         // GET: Students/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            StudentViewModel student = db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -78,7 +81,7 @@ namespace AspNetMvcFirstApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,CreatedOn")] Student student)
+        public ActionResult Edit(StudentViewModel student)
         {
             if (ModelState.IsValid)
             {
@@ -90,13 +93,14 @@ namespace AspNetMvcFirstApp.Controllers
         }
 
         // GET: Students/Delete/5
+        [HttpGet]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            StudentViewModel student = db.Students.Find(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -109,7 +113,7 @@ namespace AspNetMvcFirstApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Student student = db.Students.Find(id);
+            StudentViewModel student = db.Students.Find(id);
             db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");

@@ -25,7 +25,7 @@ namespace AspNetMvcFirstApp.Models
         {
         }
 
-        public virtual IDbSet<Student> Students { get; set; }
+        public virtual IDbSet<StudentViewModel> Students { get; set; }
 
         public static ApplicationDbContext Create()
         {
